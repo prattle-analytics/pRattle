@@ -2,17 +2,17 @@
 #'
 #' Primary R function for gathering document scores.
 #'
-#' @param bank         : A string vector that matches a central bank shorthand code.
-#' @param type         : Defaults to an xts data frame.
-#' @param portal_email : email for portal login
-#' @param portal_pwd   : password for portal login
-#' @param agg.level    : Level of aggregation for the data. Default is raw scores. Can be "daily" or "weekly".
+#' @param bank          : A string vector that matches a central bank shorthand code.
+#' @param type          : Defaults to an xts data frame.
+#' @param email         : A string vector with an email for portal login
+#' @param portal_pwd    : A string vector with a password for portal login
+#' @param agg.level     : Level of aggregation for the data. Default is raw scores. Can be "daily" or "weekly".
 #'
 #'
 #' @return Dataframe. By default, xts/zoo type.
 #'
 #' @examples
-#' head(get_scores('frc'))
+#' head(get_scores('frc', email = '<YOUR EMAIL>', pwd = '<YOUR PASSWORD>'))
 #'
 #' @export
 get_scores <- function (bank,

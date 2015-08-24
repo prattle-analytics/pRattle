@@ -4,16 +4,19 @@
 \alias{get_scores}
 \title{Get Document Scores from the Prattle API}
 \usage{
-get_scores(bank, type = "xts", auth.token = NULL, agg.level = "raw")
+get_scores(bank, type = "xts", email = NULL, pwd = NULL,
+  agg.level = "raw")
 }
 \arguments{
-\item{bank}{A string vector that matches a central bank shorthand code.}
+\item{bank}{: A string vector that matches a central bank shorthand code.}
 
-\item{type}{Defaults to an xts data frame.}
+\item{type}{: Defaults to an xts data frame.}
 
-\item{auth.token}{Oauth2 token (a string) used to retreive information from Prattle API.}
+\item{email}{: A string vector with an email for portal login}
 
-\item{agg.level}{Level of aggregation for the data. Default is raw scores. Can be "daily" or "weekly".}
+\item{agg.level}{: Level of aggregation for the data. Default is raw scores. Can be "daily" or "weekly".}
+
+\item{portal_pwd}{: A string vector with a password for portal login}
 }
 \value{
 Dataframe. By default, xts/zoo type.
@@ -22,6 +25,6 @@ Dataframe. By default, xts/zoo type.
 Primary R function for gathering document scores.
 }
 \examples{
-head(get_scores('frc'))
+head(get_scores('frc', email = '<YOUR EMAIL>', pwd = '<YOUR PASSWORD>'))
 }
 
