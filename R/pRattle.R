@@ -20,6 +20,7 @@ get_scores <- function (bank,
 			email=NULL,
 			pwd=NULL,
 			agg.level = 'raw'
+      add.extra = TRUE
 			) {
 
 
@@ -49,9 +50,14 @@ get_scores <- function (bank,
 	text2<-gsub('NaN', 10000, text)
 	json<-fromJSON(text2)
 #   print(names(json))
-	json<-json[, c('date_updated', 'score', 'url', 'speaker')]
+  if(add.extra){
+    col.index<-c('date_updated', 'score', 'url', 'speaker', 'feed')]
+  } else {
+    col.index<-c('date_updated', 'score', 'url')]
+  }
+	json<-json[, col.index]
 	df<-subset(json, score!=10000)
-	names(df)<-c('date', 'score', 'url', 'speaker')
+	names(df)<-c('date', 'score', 'url', 'speaker', 'feed')
 	df$date<-ymd_hms(df$date)
 
 	if(agg.level=='daily'){
