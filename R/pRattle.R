@@ -57,7 +57,13 @@ get_scores <- function (bank,
   }
 	json<-json[, col.index]
 	df<-subset(json, score!=10000)
-	names(df)<-c('date', 'score', 'url', 'speaker', 'feed')
+
+  if(add.extra){
+    names(df)<-c('date', 'score', 'url', 'speaker', 'feed')
+  } else {
+    names(df)<-c('date', 'score', 'url')
+  }
+	
 	df$date<-ymd_hms(df$date)
 
 	if(agg.level=='daily'){
