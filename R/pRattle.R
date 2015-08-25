@@ -19,7 +19,7 @@ get_scores <- function (bank,
 			type='xts',
 			email=NULL,
 			pwd=NULL,
-			agg.level = 'raw'
+			agg.level = 'raw',
       add.extra = TRUE
 			) {
 
@@ -51,9 +51,9 @@ get_scores <- function (bank,
 	json<-fromJSON(text2)
 #   print(names(json))
   if(add.extra){
-    col.index<-c('date_updated', 'score', 'url', 'speaker', 'feed')]
+    col.index<-c('date_updated', 'score', 'url', 'speaker', 'feed')
   } else {
-    col.index<-c('date_updated', 'score', 'url')]
+    col.index<-c('date_updated', 'score', 'url')
   }
 	json<-json[, col.index]
 	df<-subset(json, score!=10000)

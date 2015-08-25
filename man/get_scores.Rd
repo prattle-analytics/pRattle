@@ -5,7 +5,7 @@
 \title{Get Document Scores from the Prattle API}
 \usage{
 get_scores(bank, type = "xts", email = NULL, pwd = NULL,
-  agg.level = "raw")
+  agg.level = "raw", add.extra = TRUE)
 }
 \arguments{
 \item{bank}{: A string vector that matches a central bank shorthand code.}
