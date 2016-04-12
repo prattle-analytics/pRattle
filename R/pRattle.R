@@ -50,7 +50,7 @@ get_scores <- function (bank='frc',
   text2<-gsub('NaN', 10000, text)
   json<-fromJSON(text2, flatten=T)
   
-  print(names(json))
+#   print(names(json))
   
   # extract speaker name and resid info
   #   hold<-lapply(json$speaker, '[', 'residual')
