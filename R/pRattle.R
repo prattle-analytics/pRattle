@@ -15,67 +15,86 @@
 #' head(get_scores('frc', email = '<YOUR EMAIL>', pwd = '<YOUR PASSWORD>'))
 #'
 #' @export
-get_scores <- function (bank,
-			type='xts',
-			email=NULL,
-			pwd=NULL,
-			agg.level = 'raw',
-      add.extra = TRUE
-			) {
-
-
-	x<-c('lubridate', 'httr', 'jsonlite', 'xts', 'RCurl')
-	lapply(x, FUN = function(X) {
-		suppressMessages(do.call("require", list(X)))
-	})
-
-	# request user authentication from server to get json web token
-	jwt_url <- "http://portal.prattle.co/auth/local/"
-	jwt_result <- postForm(jwt_url,email=email,password=pwd,style="POST")
-	jwt_result <- fromJSON(jwt_result)
-	print(jwt_result)
-
-	# define url and clear cache to make sure connection is live.
-	url<-paste0("http://portal.prattle.co/api/documents/bank/", bank, '/')
-
-	handle_find(url)
-	handle_reset(url)
-
-	# paste Bearer to auth token
-	auth.token.fin<-paste0('Bearer ', jwt_result$token)
-
-	json.data<-GET(url, add_headers(Authorization=auth.token.fin))
-
-	text<-content(json.data, "text")
-	text2<-gsub('NaN', 10000, text)
-	json<-fromJSON(text2)
-#   print(names(json))
+get_scores <- function (bank='frc',
+                        type='xts',
+                        email=NULL,
+                        pwd=NULL,
+                        agg.level = 'raw',
+                        add.extra = TRUE
+) {
+  
+  
+  x<-c('lubridate', 'httr', 'jsonlite', 'xts', 'RCurl')
+  lapply(x, FUN = function(X) {
+    suppressMessages(do.call("require", list(X)))
+  })
+  
+  # request user authentication from server to get json web token
+  jwt_url <- "http://portal.prattle.co/auth/local/"
+  jwt_result <- postForm(jwt_url,email=email,password=pwd,style="POST")
+  jwt_result <- fromJSON(jwt_result)
+  print(jwt_result)
+  
+  # define url and clear cache to make sure connection is live.
+  url<-paste0("http://portal.prattle.co/api/documents/bank/", bank, '/')
+  
+  handle_find(url)
+  handle_reset(url)
+  
+  # paste Bearer to auth token
+  auth.token.fin<-paste0('Bearer ', jwt_result$token)
+  
+  json.data<-GET(url, add_headers(Authorization=auth.token.fin))
+  
+  text<-content(json.data, "text")
+  text2<-gsub('NaN', 10000, text)
+  json<-fromJSON(text2, flatten=T)
+  
+  print(names(json))
+  
+  # extract speaker name and resid info
+  #   hold<-lapply(json$speaker, '[', 'residual')
+  #   dat<-as.data.frame(do.call(rbind, lapply(hold, rbind)))
+  #   dat2<-sapply(dat, function(x) ifelse(x == "NULL", NA, x))
+  #   json$resid<-unlist(dat2[,1])
+  # 
+  # 
+  #   hold<-lapply(json$speaker, '[', 'name')
+  #   dat<-as.data.frame(do.call(rbind, lapply(hold, rbind)))
+  #   dat2<-sapply(dat, function(x) ifelse(x == "NULL", NA, x))
+  #   json$speaker<-unlist(dat2[,1])
+  
+  
   if(add.extra){
-    col.index<-c('date_updated', 'score', 'url', 'speaker', 'feed')
+    col.index<-c('date_updated', 
+                 'score', 
+                 'url', 
+                 'speaker.name', 
+                 'speaker.residual')
   } else {
-    col.index<-c('date_updated', 'score', 'url')
+    col.index<-c('date_updated', 'score')
   }
-	json<-json[, col.index]
-	df<-subset(json, score!=10000)
-
+  json<-json[, col.index]
+  df<-subset(json, score!=10000)
+  
   if(add.extra){
-    names(df)<-c('date', 'score', 'url', 'speaker', 'feed')
+    names(df)<-c('date', 'score', 'url', 'speaker', 'resid')
   } else {
-    names(df)<-c('date', 'score', 'url')
+    names(df)<-c('date', 'score')
   }
-	
-	df$date<-ymd_hms(df$date)
-
-	if(agg.level=='daily'){
-		df$date<-ymd(format(df$date, "%Y%m%d"))
-		df<-df[,c('date', 'score')]
-		df<-aggregate(df$score, by=list(df$date), mean)
-		names(df)<-c('date', 'score')
-	}
-
-	if(type=='xts') {
-		df<-xts(df$score, order.by=df$date)
-	}
-
-	return(df)
+  
+  df$date<-ymd_hms(df$date)
+  
+  if(agg.level=='daily'){
+    df$date<-ymd(format(df$date, "%Y%m%d"))
+    df<-df[,c('date', 'score')]
+    df<-aggregate(df$score, by=list(df$date), mean)
+    names(df)<-c('date', 'score')
+  }
+  
+  if(type=='xts') {
+    df<-xts(df$score, order.by=df$date)
+  }
+  
+  return(df)
 }
