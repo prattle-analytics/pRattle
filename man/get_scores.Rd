@@ -4,7 +4,7 @@
 \alias{get_scores}
 \title{Get Document Scores from the Prattle API}
 \usage{
-get_scores(bank, type = "xts", email = NULL, pwd = NULL,
+get_scores(bank = "frc", type = "xts", email = NULL, pwd = NULL,
   agg.level = "raw", add.extra = TRUE)
 }
 \arguments{

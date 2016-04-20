@@ -50,19 +50,20 @@ get_scores <- function (bank='frc',
   text2<-gsub('NaN', 10000, text)
   json<-fromJSON(text2, flatten=T)
   
-#   print(names(json))
+  if('speaker' %in% names(json)){
+    # extract speaker name and resid info
+    hold<-lapply(json$speaker, '[', 'residual')
+    dat<-as.data.frame(do.call(rbind, lapply(hold, rbind)))
+    dat2<-sapply(dat, function(x) ifelse(x == "NULL", NA, x))
+    json$speaker.residual<-unlist(dat2[,1])
+    
+    
+    hold<-lapply(json$speaker, '[', 'name')
+    dat<-as.data.frame(do.call(rbind, lapply(hold, rbind)))
+    dat2<-sapply(dat, function(x) ifelse(x == "NULL", NA, x))
+    json$speaker.name<-unlist(dat2[,1])
+  }
   
-  # extract speaker name and resid info
-  #   hold<-lapply(json$speaker, '[', 'residual')
-  #   dat<-as.data.frame(do.call(rbind, lapply(hold, rbind)))
-  #   dat2<-sapply(dat, function(x) ifelse(x == "NULL", NA, x))
-  #   json$resid<-unlist(dat2[,1])
-  # 
-  # 
-  #   hold<-lapply(json$speaker, '[', 'name')
-  #   dat<-as.data.frame(do.call(rbind, lapply(hold, rbind)))
-  #   dat2<-sapply(dat, function(x) ifelse(x == "NULL", NA, x))
-  #   json$speaker<-unlist(dat2[,1])
   
   
   if(add.extra){
@@ -98,3 +99,4 @@ get_scores <- function (bank='frc',
   
   return(df)
 }
+
