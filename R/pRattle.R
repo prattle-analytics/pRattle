@@ -30,13 +30,13 @@ get_scores <- function (bank='frc',
   })
   
   # request user authentication from server to get json web token
-  jwt_url <- "http://portal.prattle.co/auth/local/"
+  jwt_url <- "https://portal.prattle.co/auth/local/"
   jwt_result <- postForm(jwt_url,email=email,password=pwd,style="POST")
   jwt_result <- fromJSON(jwt_result)
   print(jwt_result)
   
   # define url and clear cache to make sure connection is live.
-  url<-paste0("http://portal.prattle.co/api/documents/bank/", bank, '/')
+  url<-paste0("https://portal.prattle.co/api/documents/bank/", bank, '/')
   
   handle_find(url)
   handle_reset(url)
