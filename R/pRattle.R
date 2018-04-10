@@ -7,7 +7,7 @@
 #' @param email         : A string vector with an email for portal login
 #' @param portal_pwd    : A string vector with a password for portal login
 #' @param agg.level     : Level of aggregation for the data. Default is raw scores. Can be "daily" or "weekly".
-#' @param ssl_workaround : Rarely used option for users with SSL certification issues. Can be "True", "False", or "NULL".
+#' @param ssl_workaround : Rarely used option for users with SSL certification issues. Can be "True", or "False".
 #'
 #'
 #' @return Dataframe. By default, xts/zoo type.
@@ -22,7 +22,7 @@ get_scores <- function (bank='frc',
                         pwd=NULL,
                         agg.level = 'raw',
                         add.extra = TRUE,
-                        ssl_workaround = NULL
+                        ssl_workaround = FALSE
 ) {
   
   
