@@ -7,6 +7,7 @@
 #' @param email         : A string vector with an email for portal login
 #' @param portal_pwd    : A string vector with a password for portal login
 #' @param agg.level     : Level of aggregation for the data. Default is raw scores. Can be "daily" or "weekly".
+#' @param ssl_workaround : Rarely used option for users with SSL certification issues. Can be "True", "False", or "NULL".
 #'
 #'
 #' @return Dataframe. By default, xts/zoo type.
@@ -20,7 +21,8 @@ get_scores <- function (bank='frc',
                         email=NULL,
                         pwd=NULL,
                         agg.level = 'raw',
-                        add.extra = TRUE
+                        add.extra = TRUE,
+                        ssl_workaround = NULL
 ) {
   
   
@@ -31,7 +33,12 @@ get_scores <- function (bank='frc',
   
   # request user authentication from server to get json web token
   jwt_url <- "https://portal.prattle.co/auth/local/"
-  jwt_result <- postForm(jwt_url,email=email,password=pwd,style="POST")
+  if(ssl_workaround){
+    jwt_result <- postForm(jwt_url,email=email,password=pwd,style="POST", .opts = list(ssl.verifypeer = FALSE))  
+  } else {
+    jwt_result <- postForm(jwt_url,email=email,password=pwd,style="POST")  
+  }
+  
   jwt_result <- fromJSON(jwt_result)
   print(jwt_result)
   
