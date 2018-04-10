@@ -2,11 +2,11 @@
 #'
 #' Primary R function for gathering document scores.
 #'
-#' @param bank          : A string vector that matches a central bank shorthand code.
-#' @param type          : Defaults to an xts data frame.
-#' @param email         : A string vector with an email for portal login
-#' @param portal_pwd    : A string vector with a password for portal login
-#' @param agg.level     : Level of aggregation for the data. Default is raw scores. Can be "daily" or "weekly".
+#' @param bank           : A string vector that matches a central bank shorthand code.
+#' @param type           : Defaults to an xts data frame.
+#' @param email          : A string vector with an email for portal login
+#' @param pwd            : A string vector with a password for portal login
+#' @param agg.level      : Level of aggregation for the data. Default is raw scores. Can be "daily" or "weekly".
 #' @param ssl_workaround : Rarely used option for users with SSL certification issues. Can be "True", or "False".
 #'
 #'
